@@ -22,11 +22,11 @@
 
 #### Control in the game:
 - quit the game - "q" or closed the window
-- on/off sound - "m" or LMB on the speaker  
-(only on the main menu):
+- on/off sound - "m" or LMB on the speaker
+##### only on the main menu:
 - start the game - "Enter" or LMB on 'START'
-- change difficulty - "Left" or "Right" or LMB on the difficulty  
-(only during the game):
+- change difficulty - "Left" or "Right" or LMB on the difficulty
+##### only during the game:
 - pause - "p"
 - return to the main menu - RMB or "Esc"
 - control the bit-player - move the mouse
