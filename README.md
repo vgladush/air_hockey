@@ -30,3 +30,7 @@
 - pause - "p"
 - return to the main menu - RMB or "Esc"
 - control the bit-player - move the mouse
+
+### Sample
+
+![](https://github.com/vgladush/resources/blob/master/air_hockey/air_hockey.gif)
