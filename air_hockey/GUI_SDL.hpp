@@ -6,7 +6,6 @@
 #include <SDL_TTF.h>
 #include <SDL_mixer.h>
 #include <vector>
-#include "GUI_SDL.hpp"
 #include "piece.h"
 
 #define WIDTH 480
