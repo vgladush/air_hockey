@@ -33,4 +33,4 @@
 
 ### Sample
 
-![](https://github.com/vgladush/resources/blob/master/air_hockey/air_hockey.gif)
+![](https://github.com/vgladush/resources/blob/master/img/air_hockey.gif)
