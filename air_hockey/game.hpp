@@ -2,18 +2,18 @@
 
 #include "GUI_SDL.hpp"
 
-class AirHockey
+class TinyFootball
 {
 public:
-	AirHockey();
-	~AirHockey();
+	TinyFootball();
+	~TinyFootball();
 	void start();
 
 private:
 	void begin_pos();
 	void behav_bot();
-	void behav_puck();
-	void hit_puck(type_piece type);
+	void behav_ball();
+	void hit_ball(type_piece type);
 	void confines(type_piece type);
 	void extrude();
 	std::unique_ptr<GUI_SDL> _lib;

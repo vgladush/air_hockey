@@ -1,6 +1,7 @@
 #include "GUI_SDL.hpp"
 #include <string>
 
+
 GUI_SDL::GUI_SDL()
 {
 	if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0)
@@ -55,8 +56,8 @@ void GUI_SDL::load_img()
 		exit(2);
 	}
 
-	_puck = IMG_LoadTexture(_rend, "res/puck.png");
-	if (!_puck)
+	_ball = IMG_LoadTexture(_rend, "res/ball.png");
+	if (!_ball)
 	{
 		std::cerr << "IMG error: " << IMG_GetError() << std::endl;
 		exit(2);
@@ -103,11 +104,16 @@ void GUI_SDL::load_sound()
 	}
 	Mix_PlayMusic(_music, -1);
 }
-
-Event_en GUI_SDL::checkEvent(piece & pl) const
+Event_en GUI_SDL::checkEvent(std::vector<piece>& pieces,unsigned idx) 
 {
 	SDL_Event event;
+	bool keys[SDL_NUM_SCANCODES];
 
+	memset(keys, false, sizeof(keys));
+	bool w_pressed = false;
+	bool d_pressed = false;
+	bool a_pressed = false;
+	bool s_pressed = false;
 	if (SDL_PollEvent(&event))
 	{
 		switch (event.type)
@@ -116,10 +122,66 @@ Event_en GUI_SDL::checkEvent(piece & pl) const
 			return esc;
 		case SDL_KEYDOWN:
 		{
+			keys[event.key.keysym.scancode] = true;
+			if (event.key.keysym.scancode == SDL_SCANCODE_W)
+			{
+				w_pressed = true;
+			}
+			else if (event.key.keysym.scancode == SDL_SCANCODE_S)
+			{
+				s_pressed = true;
+			}
+			if (event.key.keysym.scancode == SDL_SCANCODE_D)
+			{
+				d_pressed = true;
+			}
+			else if (event.key.keysym.scancode == SDL_SCANCODE_A)
+			{
+				a_pressed = true;
+			}
+			break;
 			switch (event.key.keysym.sym)
 			{
+			case SDLK_w:
+				/*pl.xp = pl.x;
+				pl.yp = pl.y;
+				pl.y -= 10;*/
+				w_pressed = true;
+				std::cout << "up1 \n";
+				break;
+			case SDLK_s:
+				/*pl.xp = pl.x;
+				pl.yp = pl.y;
+				pl.y += 10;
+				*/
+				s_pressed = true;
+				std::cout << "down1 \n";
+				break;
+			case SDLK_d:
+				/*pl.xp = pl.x;
+				pl.yp = pl.y;
+				pl.x +=  10;*/
+				d_pressed = true;
+				std::cout << "right1 \n";
+				break;
+			case SDLK_a:
+				/*pl.xp = pl.x;
+				pl.yp = pl.y;
+				pl.x -= 10;*/
+				a_pressed = true;
+				std::cout << "left1 \n";
+				break;
+			case SDLK_UP:
+				std::cout << "up2 \n";
+				break;
+			case SDLK_DOWN:
+				std::cout << "down2 \n";
+				break;
 			case SDLK_RIGHT:
+				std::cout << "right2 \n";
+				break;
 			case SDLK_LEFT:
+				std::cout << "left2 \n";
 				return dific;
 			case SDLK_q:
 				return esc;
@@ -131,15 +193,16 @@ Event_en GUI_SDL::checkEvent(piece & pl) const
 			case SDLK_m:
 				return mus;
 			}
+
 		}
-		case SDL_MOUSEMOTION:
+		/*case SDL_MOUSEMOTION:
 		{
 			pl.xp = pl.x;
 			pl.yp = pl.y;
 			pl.x = event.motion.x - SIZE_BAT / 2;
 			pl.y = event.motion.y - SIZE_BAT / 2;
 			break;
-		}
+		}*/
 		case SDL_MOUSEBUTTONUP:
 		{
 			if (event.button.button == SDL_BUTTON_LEFT)
@@ -156,12 +219,20 @@ Event_en GUI_SDL::checkEvent(piece & pl) const
 				return menu;
 			break;
 		}
+
 		}
+		pieces[idx].xp = pieces[idx].x;
+		pieces[idx].yp = pieces[idx].y;
+		if (w_pressed) pieces[idx].y -= 10;
+		if (s_pressed) pieces[idx].y += 10;
+		if (a_pressed) pieces[idx].x -= 10;
+		if (d_pressed) pieces[idx].x += 10;
+		//this->draw(pieces);
 	}
 	return nothing;
 }
 
-void GUI_SDL::draw(const std::vector<piece> & pieces)
+void GUI_SDL::draw(std::vector<piece> & pieces)
 {
 	SDL_RenderClear(_rend);
 	SDL_RenderCopy(_rend, _background, NULL, NULL);
@@ -184,10 +255,10 @@ void GUI_SDL::draw(const std::vector<piece> & pieces)
 	SDL_FreeSurface(_ttf);
 	SDL_DestroyTexture(_text);
 
-	_dst.h = _dst.w = SIZE_PUCK;
+	_dst.h = _dst.w = SIZE_BALL;
 	_dst.x = pieces[2].x;
 	_dst.y = pieces[2].y;
-	SDL_RenderCopy(_rend, _puck, &_src, &_dst);
+	SDL_RenderCopy(_rend, _ball, &_src, &_dst);
 
 	_dst.h = _dst.w = SIZE_BAT;
 	_dst.x = pieces[0].x;
@@ -220,7 +291,7 @@ void GUI_SDL::new_game(bool hard)
 	SDL_RenderPresent(_rend);
 
 	SDL_DestroyTexture(_background);
-	_background = IMG_LoadTexture(_rend, "res/field.jpg");
+	_background = IMG_LoadTexture(_rend, "res/field1.jpg");
 	if (!_background)
 	{
 		std::cerr << "IMG error: " << IMG_GetError() << std::endl;
@@ -270,7 +341,7 @@ void GUI_SDL::play_sound(Collision s)
 GUI_SDL::~GUI_SDL()
 {
 	SDL_DestroyTexture(_background);
-	SDL_DestroyTexture(_puck);
+	SDL_DestroyTexture(_ball);
 	SDL_DestroyTexture(_bat);
 	SDL_DestroyTexture(_dynamic);
 	SDL_DestroyTexture(_text);

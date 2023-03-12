@@ -4,7 +4,7 @@ enum type_piece
 {
 	tbot,
 	tplayer,
-	tpuck
+	tball
 };
 
 enum Collision

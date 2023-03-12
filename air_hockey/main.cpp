@@ -6,7 +6,7 @@ int main()
 {
 	try
 	{
-		AirHockey ah;
+		TinyFootball ah;
 		ah.start();
 	}
 	catch (const std::exception& ex)
