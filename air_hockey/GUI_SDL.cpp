@@ -104,7 +104,7 @@ void GUI_SDL::load_sound()
 	}
 	Mix_PlayMusic(_music, -1);
 }
-Event_en GUI_SDL::checkEvent(std::vector<piece>& pieces,unsigned idx) 
+Event_en GUI_SDL::checkEvent(piece & pl) 
 {
 	SDL_Event event;
 	bool keys[SDL_NUM_SCANCODES];
@@ -122,56 +122,71 @@ Event_en GUI_SDL::checkEvent(std::vector<piece>& pieces,unsigned idx)
 			return esc;
 		case SDL_KEYDOWN:
 		{
-			keys[event.key.keysym.scancode] = true;
-			if (event.key.keysym.scancode == SDL_SCANCODE_W)
-			{
-				w_pressed = true;
-			}
-			else if (event.key.keysym.scancode == SDL_SCANCODE_S)
-			{
-				s_pressed = true;
-			}
-			if (event.key.keysym.scancode == SDL_SCANCODE_D)
-			{
-				d_pressed = true;
-			}
-			else if (event.key.keysym.scancode == SDL_SCANCODE_A)
-			{
-				a_pressed = true;
-			}
-			break;
-			switch (event.key.keysym.sym)
-			{
-			case SDLK_w:
-				/*pl.xp = pl.x;
+			const Uint8* state = SDL_GetKeyboardState(NULL);
+			/*if (state[SDL_SCANCODE_UP]) p2.move('U');
+			if (state[SDL_SCANCODE_DOWN]) p2.move('D');
+			if (state[SDL_SCANCODE_LEFT]) p2.move('L');
+			if (state[SDL_SCANCODE_RIGHT]) p2.move('R');*/
+			if (state[SDL_SCANCODE_W]) {
+				pl.xp = pl.x;
 				pl.yp = pl.y;
-				pl.y -= 10;*/
-				w_pressed = true;
+				pl.y -= 10;
+				//w_pressed = true;
 				std::cout << "up1 \n";
-				break;
-			case SDLK_s:
-				/*pl.xp = pl.x;
+			}
+			if (state[SDL_SCANCODE_S]) {
+				pl.xp = pl.x;
 				pl.yp = pl.y;
 				pl.y += 10;
-				*/
-				s_pressed = true;
+				//s_pressed = true;
 				std::cout << "down1 \n";
-				break;
-			case SDLK_d:
-				/*pl.xp = pl.x;
+			}
+			if (state[SDL_SCANCODE_A]) {
+				pl.xp = pl.x;
 				pl.yp = pl.y;
-				pl.x +=  10;*/
-				d_pressed = true;
-				std::cout << "right1 \n";
-				break;
-			case SDLK_a:
-				/*pl.xp = pl.x;
-				pl.yp = pl.y;
-				pl.x -= 10;*/
-				a_pressed = true;
+				pl.x -= 10;
+				//a_pressed = true;
 				std::cout << "left1 \n";
-				break;
-			case SDLK_UP:
+			}
+			if (state[SDL_SCANCODE_D]) {
+				pl.xp = pl.x;
+				pl.yp = pl.y;
+				pl.x += 10;
+				//d_pressed = true;
+				std::cout << "right1 \n";
+			}
+			//if (event.key.keysym.sym == SDLK_w)
+			//{
+			//	pl.xp = pl.x;
+			//	pl.yp = pl.y;
+			//	pl.y -= 15;
+			//	//w_pressed = true;
+			//	std::cout << "up1 \n";
+			//}
+			//if (event.key.keysym.sym == SDLK_s)
+			//{
+			//	pl.xp = pl.x;
+			//	pl.yp = pl.y;
+			//	pl.y += 15;
+			//	//s_pressed = true;
+			//	std::cout << "down1 \n";
+			//}
+			//if (event.key.keysym.sym == SDLK_d)
+			//{
+			//	pl.xp = pl.x;
+			//	pl.yp = pl.y;
+			//	pl.x += 15;
+			//	//d_pressed = true;
+			//	std::cout << "right1 \n";
+			//}
+			//if (event.key.keysym.sym == SDLK_a) {
+			//	pl.xp = pl.x;
+			//	pl.yp = pl.y;
+			//	pl.x -= 15;
+			//	//a_pressed = true;
+			//	std::cout << "left1 \n";
+			//}
+			/*case SDLK_UP:
 				std::cout << "up2 \n";
 				break;
 			case SDLK_DOWN:
@@ -191,10 +206,10 @@ Event_en GUI_SDL::checkEvent(std::vector<piece>& pieces,unsigned idx)
 			case SDLK_RETURN:
 				return play;
 			case SDLK_m:
-				return mus;
-			}
-
+				return mus;*/
 		}
+
+		
 		/*case SDL_MOUSEMOTION:
 		{
 			pl.xp = pl.x;
@@ -221,12 +236,12 @@ Event_en GUI_SDL::checkEvent(std::vector<piece>& pieces,unsigned idx)
 		}
 
 		}
-		pieces[idx].xp = pieces[idx].x;
+		/*pl.xp = pieces[idx].x;
 		pieces[idx].yp = pieces[idx].y;
-		if (w_pressed) pieces[idx].y -= 10;
+		if (w_pressed) pl.y -= 10;
 		if (s_pressed) pieces[idx].y += 10;
 		if (a_pressed) pieces[idx].x -= 10;
-		if (d_pressed) pieces[idx].x += 10;
+		if (d_pressed) pieces[idx].x += 10;*/
 		//this->draw(pieces);
 	}
 	return nothing;
@@ -241,8 +256,9 @@ void GUI_SDL::draw(std::vector<piece> & pieces)
 	_dst.x = 450;
 	_dst.y = HEIGHT / 2 - 40;
 	_dst.h = 39;
+
 	_dst.w = 21;
-	_ttf = TTF_RenderText_Solid(_font, std::to_string(pieces[0].score).c_str(), _color);
+	_ttf = TTF_RenderText_Solid(_font, std::to_string(pieces[0].score).c_str(), _color);	
 	_text = SDL_CreateTextureFromSurface(_rend, _ttf);
 	SDL_RenderCopy(_rend, _text, 0, &_dst);
 	SDL_FreeSurface(_ttf);

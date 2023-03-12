@@ -139,29 +139,29 @@ void TinyFootball::confines(type_piece type)
 {
 	piece & bat = _pieces[type];
 
-	if (type == tplayer && bat.y < HEIGHT / 2 - 1)
-		bat.y = HEIGHT / 2 - 1;
+	/*if (type == tplayer && bat.y < HEIGHT / 2 - 1)
+		bat.y = HEIGHT / 2 - 1;*/
 	if (type == tbot && bat.y > HEIGHT / 2 - SIZE_BAT)
 		bat.y = HEIGHT / 2 - SIZE_BAT;
-	if (bat.x > WIDTH - SIZE_BAT - 2)
+	if (bat.x > WIDTH - SIZE_BAT - 20)
 	{
 		_lib->play_sound(board);
-		bat.x = WIDTH - SIZE_BAT - 2;
+		bat.x = WIDTH - SIZE_BAT - 20;
 	}
-	if (bat.x < 2)
+	if (bat.x < 20)
 	{
 		_lib->play_sound(board);
-		bat.x = 2;
+		bat.x = 20;
 	}
-	if (type == tplayer && bat.y > HEIGHT - SIZE_BAT - 2)
+	if (type == tplayer && bat.y > HEIGHT - SIZE_BAT - 40)
 	{
 		_lib->play_sound(board);
-		bat.y = HEIGHT - SIZE_BAT - 2;
+		bat.y = HEIGHT - SIZE_BAT - 40;
 	}
-	if (type == tbot && bat.y < 2)
+	if (type == tbot && bat.y < 40)
 	{
 		_lib->play_sound(board);
-		bat.y = 2;
+		bat.y = 40;
 	}
 	bat.xs = bat.x - bat.xp;
 	bat.ys = bat.y - bat.yp;
@@ -210,7 +210,7 @@ void TinyFootball::start()
 
 	while (true)
 	{
-		_event = _lib->checkEvent(_pieces,1);
+		_event = _lib->checkEvent(_pieces[1]);
 		switch (_event)
 		{
 		case nothing:
