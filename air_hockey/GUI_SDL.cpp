@@ -270,6 +270,7 @@ void GUI_SDL::draw(std::vector<piece> & pieces)
 	SDL_RenderCopy(_rend, _bat, &_src, &_dst);
 
 	draw_dynamic();
+
 	SDL_RenderPresent(_rend);
 }
 
