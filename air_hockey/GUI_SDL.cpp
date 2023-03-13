@@ -295,7 +295,7 @@ void GUI_SDL::new_game(bool hard)
 	SDL_DestroyTexture(_background);
 	SDL_RenderClear(_rend);
 	SDL_RenderCopy(_rend, _background, NULL, NULL);
-	_background = IMG_LoadTexture(_rend, (hard ? "res/hard.jpg" : "res/norm.jpg"));
+	_background = IMG_LoadTexture(_rend, (hard ? "res/HARD.png" : "res/NORM.png"));
 	if (!_background)
 	{
 		std::cerr << "IMG error: " << IMG_GetError() << std::endl;
