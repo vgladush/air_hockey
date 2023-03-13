@@ -234,25 +234,25 @@ void TinyFootball::behav_bot()
 		_pieces[i].xs = (speed < distance ? speed : distance) * (preX < _pieces[i].x ? -1 : 1)  ;
 		if (i%2 == 1) {
 			if (preY > HEIGHT / 2) {
-				_pieces[i].ys -= (_pieces[i].y - speed > 75 ? speed : 0);// *(i % 2 == 0 ? -1 : 1);
+				_pieces[i].ys -= (_pieces[i].y - speed > 75 ? speed : 0);
 			}
 			if (preY < _pieces[i].y + SIZE_BAT / 2)
 				_pieces[i].ys = -speed;
 			else if (distY > distance || speed > distance - SIZE_BALL / 2)
-				_pieces[i].ys = (speed < distY ? speed : distY);// (i % 2 == 0 ? -1 : 1);
+				_pieces[i].ys = (speed < distY ? speed : distY);
 			else
-				_pieces[i].ys = distY / (distance / speed);// (i % 2 == 0 ? -1 : 1);
+				_pieces[i].ys = distY / (distance / speed);
 		}
 		else {
 			if (preY < HEIGHT / 2) {
-				_pieces[i].ys += (_pieces[i].y - speed > 75 ? speed : 0);// *(i % 2 == 0 ? -1 : 1);
+				_pieces[i].ys += (_pieces[i].y - speed > 75 ? speed : 0);
 			}
 			if (preY > _pieces[i].y + SIZE_BAT / 2)
 				_pieces[i].ys = speed;
 			else if (distY > distance || speed > distance - SIZE_BALL / 2)
-				_pieces[i].ys = (speed < distY ? speed : distY);// (i % 2 == 0 ? -1 : 1);
+				_pieces[i].ys = (speed < distY ? speed : distY);
 			else
-				_pieces[i].ys = distY / (distance / speed);// (i % 2 == 0 ? -1 : 1);
+				_pieces[i].ys = distY / (distance / speed);
 		}
 
 
@@ -278,13 +278,20 @@ void TinyFootball::start()
 	SDL_Event event;
 	while (true)
 	{
-		_event = _lib->checkEvent(_pieces,player);
+		_event = _lib->checkEvent(_pieces,player,_hard);
 		switch (_event)
 		{
 		case nothing:
 			break;
 		case esc:
 			return;
+		case pvp:
+			if (!_play)
+			{
+				_play = true;
+				begin_pos();
+			}
+			break;
 		case play:
 			if (!_play)
 			{

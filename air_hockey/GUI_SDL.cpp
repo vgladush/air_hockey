@@ -110,7 +110,7 @@ void GUI_SDL::load_sound()
 	}
 	Mix_PlayMusic(_music, -1);
 }
-Event_en GUI_SDL::checkEvent(std::vector<piece>& pieces, int & player)
+Event_en GUI_SDL::checkEvent(std::vector<piece>& pieces, int & player , bool hard)
 {
 	SDL_Event event;
 	bool keys[SDL_NUM_SCANCODES];
@@ -136,28 +136,28 @@ Event_en GUI_SDL::checkEvent(std::vector<piece>& pieces, int & player)
 			if (state[SDL_SCANCODE_W]) {
 				pieces[player].xp = pieces[player].x;
 				pieces[player].yp = pieces[player].y;
-				pieces[player].y -= 10;
+				pieces[player].y -= (hard ? MAX_SPEED / 2: MAX_SPEED );
 				//w_pressed = true;
 				std::cout << "up1 \n";
 			}
 			if (state[SDL_SCANCODE_S]) {
 				pieces[player].xp = pieces[player].x;
 				pieces[player].yp = pieces[player].y;
-				pieces[player].y += 10;
+				pieces[player].y += (hard ? MAX_SPEED / 2 : MAX_SPEED);
 				//s_pressed = true;
 				std::cout << "down1 \n";
 			}
 			if (state[SDL_SCANCODE_A]) {
 				pieces[player].xp = pieces[player].x;
 				pieces[player].yp = pieces[player].y;
-				pieces[player].x -= 10;
+				pieces[player].x -= (hard ? MAX_SPEED / 2 : MAX_SPEED);
 				//a_pressed = true;
 				std::cout << "left1 \n";
 			}
 			if (state[SDL_SCANCODE_D]) {
 				pieces[player].xp = pieces[player].x;
 				pieces[player].yp = pieces[player].y;
-				pieces[player].x += 10;
+				pieces[player].x += (hard ? MAX_SPEED / 2: MAX_SPEED );
 				//d_pressed = true;
 				std::cout << "right1 \n";
 			}
@@ -236,11 +236,14 @@ Event_en GUI_SDL::checkEvent(std::vector<piece>& pieces, int & player)
 		case SDL_MOUSEBUTTONUP:
 		{
 			if (event.button.button == SDL_BUTTON_LEFT)
-			{
-				if (event.button.y > HEIGHT / 2 - 30 && event.button.y < HEIGHT / 2 + 30)
+			{   
+				if (event.button.y > 200 && event.button.y < 300
+					&& event.button.x > 280 && event.button.x < 450)
+					return pvp;
+				if (event.button.y > HEIGHT / 2 + 140 && event.button.y < HEIGHT / 2 + 200)
 					return dific;
-				if (event.button.y > HEIGHT / 2 + 70 && event.button.y < HEIGHT / 2 + 115
-					&& event.button.x > 140 && event.button.x < 340)
+				if (event.button.y > HEIGHT / 2 + 220 && event.button.y < HEIGHT / 2 + 320
+					&& event.button.x > 40 && event.button.x < 200)
 					return play;
 				if (event.button.y > HEIGHT - 54 && event.button.x < 54)
 					return mus;

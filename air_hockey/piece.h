@@ -16,6 +16,7 @@ enum Collision
 
 enum Event_en
 {
+	pvp,
 	nothing,
 	esc,
 	play,

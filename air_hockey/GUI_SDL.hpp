@@ -26,7 +26,7 @@ public:
 	~GUI_SDL();
 
 	void new_game(bool hard);
-	Event_en checkEvent(std::vector<piece> & pieces, int & player) ;
+	Event_en checkEvent(std::vector<piece> & pieces, int & player, bool hard);
 	void draw( std::vector<piece> & pieces);
 	bool change_noise();
 	void play_sound(Collision s);
