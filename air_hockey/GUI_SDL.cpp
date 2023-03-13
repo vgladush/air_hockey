@@ -10,7 +10,7 @@ GUI_SDL::GUI_SDL()
 		exit(1);
 	}
 
-	_win = SDL_CreateWindow("Air Hockey", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
+	_win = SDL_CreateWindow("Tiny Football", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
 	if (!_win)
 	{
 		std::cerr << "SDL error: " << SDL_GetError() << std::endl;
@@ -62,8 +62,14 @@ void GUI_SDL::load_img()
 		std::cerr << "IMG error: " << IMG_GetError() << std::endl;
 		exit(2);
 	}
-	_bat = IMG_LoadTexture(_rend, "res/bat.png");
-	if (!_bat)
+	_bat1 = IMG_LoadTexture(_rend, "res/bat.png");
+	if (!_bat1)
+	{
+		std::cerr << "IMG error: " << IMG_GetError() << std::endl;
+		exit(2);
+	}
+	_bat2 = IMG_LoadTexture(_rend, "res/puck.png");
+	if (!_bat2)
 	{
 		std::cerr << "IMG error: " << IMG_GetError() << std::endl;
 		exit(2);
@@ -104,7 +110,7 @@ void GUI_SDL::load_sound()
 	}
 	Mix_PlayMusic(_music, -1);
 }
-Event_en GUI_SDL::checkEvent(piece & pl) 
+Event_en GUI_SDL::checkEvent(std::vector<piece>& pieces, int & player)
 {
 	SDL_Event event;
 	bool keys[SDL_NUM_SCANCODES];
@@ -128,32 +134,41 @@ Event_en GUI_SDL::checkEvent(piece & pl)
 			if (state[SDL_SCANCODE_LEFT]) p2.move('L');
 			if (state[SDL_SCANCODE_RIGHT]) p2.move('R');*/
 			if (state[SDL_SCANCODE_W]) {
-				pl.xp = pl.x;
-				pl.yp = pl.y;
-				pl.y -= 10;
+				pieces[player].xp = pieces[player].x;
+				pieces[player].yp = pieces[player].y;
+				pieces[player].y -= 10;
 				//w_pressed = true;
 				std::cout << "up1 \n";
 			}
 			if (state[SDL_SCANCODE_S]) {
-				pl.xp = pl.x;
-				pl.yp = pl.y;
-				pl.y += 10;
+				pieces[player].xp = pieces[player].x;
+				pieces[player].yp = pieces[player].y;
+				pieces[player].y += 10;
 				//s_pressed = true;
 				std::cout << "down1 \n";
 			}
 			if (state[SDL_SCANCODE_A]) {
-				pl.xp = pl.x;
-				pl.yp = pl.y;
-				pl.x -= 10;
+				pieces[player].xp = pieces[player].x;
+				pieces[player].yp = pieces[player].y;
+				pieces[player].x -= 10;
 				//a_pressed = true;
 				std::cout << "left1 \n";
 			}
 			if (state[SDL_SCANCODE_D]) {
-				pl.xp = pl.x;
-				pl.yp = pl.y;
-				pl.x += 10;
+				pieces[player].xp = pieces[player].x;
+				pieces[player].yp = pieces[player].y;
+				pieces[player].x += 10;
 				//d_pressed = true;
 				std::cout << "right1 \n";
+			}
+			if (state[SDL_SCANCODE_LCTRL]) {
+				pieces[player].type = tbot;
+				player += 2;
+				if (player > 6) player -= 6;
+				pieces[player].type = tplayer;
+				
+				//w_pressed = true;
+				std::cout << "change player \n";
 			}
 			//if (event.key.keysym.sym == SDLK_w)
 			//{
@@ -258,32 +273,48 @@ void GUI_SDL::draw(std::vector<piece> & pieces)
 	_dst.h = 39;
 
 	_dst.w = 21;
-	_ttf = TTF_RenderText_Solid(_font, std::to_string(pieces[0].score).c_str(), _color);	
+	_ttf = TTF_RenderText_Solid(_font, std::to_string(pieces[5].score).c_str(), _color);	
 	_text = SDL_CreateTextureFromSurface(_rend, _ttf);
 	SDL_RenderCopy(_rend, _text, 0, &_dst);
 	SDL_FreeSurface(_ttf);
 	SDL_DestroyTexture(_text);
 
 	_dst.y = HEIGHT / 2;
-	_ttf = TTF_RenderText_Solid(_font, std::to_string(pieces[1].score).c_str(), _color);
+	_ttf = TTF_RenderText_Solid(_font, std::to_string(pieces[6].score).c_str(), _color);
 	_text = SDL_CreateTextureFromSurface(_rend, _ttf);
 	SDL_RenderCopy(_rend, _text, 0, &_dst);
 	SDL_FreeSurface(_ttf);
 	SDL_DestroyTexture(_text);
 
 	_dst.h = _dst.w = SIZE_BALL;
-	_dst.x = pieces[2].x;
-	_dst.y = pieces[2].y;
+	_dst.x = pieces[0].x;
+	_dst.y = pieces[0].y;
 	SDL_RenderCopy(_rend, _ball, &_src, &_dst);
 
 	_dst.h = _dst.w = SIZE_BAT;
-	_dst.x = pieces[0].x;
-	_dst.y = pieces[0].y;
-	SDL_RenderCopy(_rend, _bat, &_src, &_dst);
-
 	_dst.x = pieces[1].x;
 	_dst.y = pieces[1].y;
-	SDL_RenderCopy(_rend, _bat, &_src, &_dst);
+	SDL_RenderCopy(_rend, _bat1, &_src, &_dst);
+
+	_dst.x = pieces[3].x;
+	_dst.y = pieces[3].y;
+	SDL_RenderCopy(_rend, _bat1, &_src, &_dst);
+
+	_dst.x = pieces[5].x;
+	_dst.y = pieces[5].y;
+	SDL_RenderCopy(_rend, _bat1, &_src, &_dst);
+
+	_dst.x = pieces[2].x;
+	_dst.y = pieces[2].y;
+	SDL_RenderCopy(_rend, _bat2, &_src, &_dst);
+
+	_dst.x = pieces[4].x;
+	_dst.y = pieces[4].y;
+	SDL_RenderCopy(_rend, _bat2, &_src, &_dst);
+
+	_dst.x = pieces[6].x;
+	_dst.y = pieces[6].y;
+	SDL_RenderCopy(_rend, _bat2, &_src, &_dst);
 
 	draw_dynamic();
 
@@ -359,7 +390,8 @@ GUI_SDL::~GUI_SDL()
 {
 	SDL_DestroyTexture(_background);
 	SDL_DestroyTexture(_ball);
-	SDL_DestroyTexture(_bat);
+	SDL_DestroyTexture(_bat1);
+	SDL_DestroyTexture(_bat2);
 	SDL_DestroyTexture(_dynamic);
 	SDL_DestroyTexture(_text);
 	TTF_CloseFont(_font);

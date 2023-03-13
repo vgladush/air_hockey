@@ -16,7 +16,7 @@
 #define BLACK_COLOR 0,0,0
 #define RED_COLOR 255,0,0
 #define BLUE_COLOR 0,0,255
-#define MAX_SPEED SIZE_BALL /2
+#define MAX_SPEED SIZE_BALL/2
 #define BOOT_SP 6
 
 class GUI_SDL
@@ -26,7 +26,7 @@ public:
 	~GUI_SDL();
 
 	void new_game(bool hard);
-	Event_en checkEvent(piece& pl) ;
+	Event_en checkEvent(std::vector<piece> & pieces, int & player) ;
 	void draw( std::vector<piece> & pieces);
 	bool change_noise();
 	void play_sound(Collision s);
@@ -42,7 +42,7 @@ private:
 	SDL_Window *_win;
 	SDL_Renderer *_rend;
 	SDL_Surface *_ttf;
-	SDL_Texture *_background, *_bat, *_ball, *_text, *_dynamic;
+	SDL_Texture *_background, *_bat1, *_bat2, *_ball, *_text, *_dynamic;
 	TTF_Font *_font;
 	SDL_Color _color;
 	SDL_Rect _src, _dst;

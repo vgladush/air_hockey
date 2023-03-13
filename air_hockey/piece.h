@@ -2,9 +2,9 @@
 
 enum type_piece
 {
+	tball,
 	tbot,
-	tplayer,
-	tball
+	tplayer
 };
 
 enum Collision
@@ -26,6 +26,7 @@ enum Event_en
 
 struct piece
 {
+	type_piece type;
 	int8_t score;
 	double x, y, xp, yp, xs, ys; // x,y | previous x,y | speed between previous and current 
 };
